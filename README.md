@@ -2,174 +2,292 @@
 
 # 🧬 Pharma Loop Engineering
 
-**AI-powered drug repurposing engine using evolutionary multi-agent loops**
+**Motor evolutivo de reposicionamiento farmacéutico con agentes multi-IA**
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Qwen](https://img.shields.io/badge/LLM-Qwen%20Only-7B68EE?style=flat-square)](https://huggingface.co/Qwen)
 [![Asyncio](https://img.shields.io/badge/Async-asyncio-00BCD4?style=flat-square)](https://docs.python.org/3/library/asyncio.html)
+[![Streamlit](https://img.shields.io/badge/Dashboard-Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![License](https://img.shields.io/badge/License-MIT-22C55E?style=flat-square)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Active%20Research-F59E0B?style=flat-square)]()
+[![Status](https://img.shields.io/badge/Status-En%20Producción-F59E0B?style=flat-square)]()
 
-*Finds new cures — not just treatments — by evolving hypotheses across approved drug combinations*
+*Encuentra curas — no solo tratamientos — evolucionando hipótesis sobre combinaciones de fármacos ya aprobados*
+
+[Ver Repositorio](https://github.com/AngelTroncoso/solucionaenfermedades) · [Reportar Bug](https://github.com/AngelTroncoso/solucionaenfermedades/issues)
 
 </div>
 
 ---
 
-## ✦ What it does
+## ✦ Qué hace
 
-Pharma Loop Engineering combines **Loop Engineering** and a **Sakana FuGU evolutionary agent** to discover novel therapeutic uses for already-approved drugs. Instead of developing new molecules, it mines existing pharmacological profiles and evolves hypotheses until a solution reaches clinical plausibility.
+Pharma Loop Engineering combina **Loop Engineering** y un **agente evolutivo Sakana FuGU** para descubrir usos terapéuticos nuevos en fármacos ya aprobados por FDA/EMA. En lugar de sintetizar nuevas moléculas, mina perfiles farmacológicos existentes y evoluciona hipótesis hasta alcanzar plausibilidad clínica.
 
-**Priority disease targets:**
-- 🤧 Chronic allergic rhinitis (spring & dust-triggered)
-- Extensible to any Th2-mediated or inflammatory condition
+**Enfermedades objetivo prioritarias:**
+- 🤧 Rinitis alérgica crónica (primaveral y al polvo) — pipeline especializado con criterios ARIA 2020
+- Extensible a cualquier condición Th2-mediada o inflamatoria
 
-**Key constraint:** all LLM inference runs exclusively on **Qwen models** (no GPT, Claude, Gemini, or Llama).
-
----
-
-## 🏗️ Architecture
-
-```
-main.py  ──►  Loop Engineering (async, up to 10 iterations)
-                 │
-                 ├── 🔬 Researcher     generates repurposing hypotheses
-                 ├── ⚖️  Evaluator      scores on 5 clinical dimensions
-                 ├── 🔁 Refiner        improves low-scoring hypotheses
-                 └── 🧬 Sakana FuGU   evolves a population of hypotheses
-                          │
-                          └── fitness → crossover → mutation → next generation
-```
-
-### Fitness dimensions (Evaluator + FuGU)
-
-| Dimension | Weight |
-|---|---|
-| Molecular mechanism | 30% |
-| PubMed evidence | 25% |
-| Safety profile | 20% |
-| Scientific novelty | 15% |
-| Implementation cost | 10% |
-
-A hypothesis is published to `research_results/` only when **fitness ≥ 0.80**.
+> **Restricción de modelos:** toda la inferencia LLM corre exclusivamente en **modelos Qwen** vía OpenRouter. Sin GPT, Claude, Gemini ni Llama.
 
 ---
 
-## 📂 Project Structure
+## 🏗️ Arquitectura del Sistema
 
-```
-pharma_loop_engineering/
-├── agents/
-│   ├── researcher.py        # Generates repurposing hypotheses
-│   ├── evaluator.py         # Scores each hypothesis
-│   ├── refiner.py           # Iterative improvement with early stopping
-│   └── sakana_fugu.py       # Population-based evolutionary search
-├── config/
-│   ├── settings.py
-│   ├── domain_knowledge.yaml
-│   └── system_prompts/
-│       ├── researcher_system.md
-│       ├── evaluator_system.md
-│       ├── refiner_system.md
-│       └── rhinitis_specialist_system.md
-├── data/drug_database/
-│   ├── approved_drugs.json       # FDA/EMA approved drugs + molecular profiles
-│   └── evolution_memory.json     # Generational checkpoint history
-├── dashboard/
-│   └── results_viewer.py         # Streamlit + Plotly results dashboard
-├── tests/
-│   ├── test_loop_engineering.py
-│   ├── test_sakana_fugu.py
-│   └── test_rhinitis_pipeline.py
-└── main.py
+```mermaid
+flowchart TD
+    A([🚀 main.py]) --> B{Loop Engineering\nmax 10 iteraciones}
+
+    B --> C[🔬 Researcher\nGenera hipótesis]
+    C --> D[⚖️ Evaluator\nPuntúa 5 dimensiones]
+    D --> E{fitness ≥ 0.80?}
+
+    E -->|✅ Sí| F[(📁 research_results/\nHipótesis publicada)]
+    E -->|❌ No| G[🔁 Refiner\nMejora iterativa]
+
+    G --> H{¿Mejoró en\n3 rondas?}
+    H -->|✅ Sí| D
+    H -->|❌ No| I[🧬 Sakana FuGU\nEvolución por población]
+
+    I --> J[Selección torneo\ntop 30%]
+    J --> K[Crossover\nmecanismos moleculares]
+    K --> L[Mutación\ndosis / vía / combinación]
+    L --> C
+
+    F --> M{¿Más enfermedades\nen cola?}
+    M -->|✅ Sí| B
+    M -->|❌ No| N([🏁 Fin])
+
+    style A fill:#1e3a5f,color:#fff
+    style F fill:#166534,color:#fff
+    style I fill:#581c87,color:#fff
+    style N fill:#1e3a5f,color:#fff
 ```
 
 ---
 
-## 🚀 Quickstart
+## 🧬 Pipeline de Rinitis Alérgica
+
+```mermaid
+flowchart LR
+    subgraph ALÉRGENOS["🌿 Alérgenos detectados"]
+        A1[Dermatophagoides\npolvo]
+        A2[Gramíneas\nprimavera]
+        A3[Olivo\nprimavera]
+    end
+
+    subgraph TH2["⚡ Cascada Th2"]
+        B1[IL-4] --> B2[IL-5]
+        B2 --> B3[IL-13]
+        B3 --> B4[IgE]
+        B4 --> B5[Mastocitos]
+        B5 --> B6[Eosinófilos]
+    end
+
+    subgraph BIOMARCADORES["🔬 Biomarcadores ARIA 2020"]
+        C1[FeNO]
+        C2[IgE específica]
+        C3[Eosinófilos nasales]
+    end
+
+    subgraph OBJETIVO["🎯 Objetivo"]
+        D1[❌ Solo controlar\nsíntomas]
+        D2[✅ Tolerancia\ninmunológica duradera]
+    end
+
+    ALÉRGENOS --> TH2
+    TH2 --> BIOMARCADORES
+    BIOMARCADORES --> OBJETIVO
+
+    style D2 fill:#166534,color:#fff
+    style D1 fill:#7f1d1d,color:#fff
+```
+
+---
+
+## 📦 Estructura del Proyecto
+
+```mermaid
+mindmap
+  root((solucionaenfermedades))
+    agents
+      researcher.py
+      evaluator.py
+      refiner.py
+      sakana_fugu.py
+    config
+      settings.py
+      domain_knowledge.yaml
+      system_prompts
+        researcher_system.md
+        evaluator_system.md
+        refiner_system.md
+        rhinitis_specialist_system.md
+    data
+      drug_database
+        approved_drugs.json
+        evolution_memory.json
+    dashboard
+      results_viewer.py
+    tests
+      test_loop_engineering.py
+      test_sakana_fugu.py
+      test_rhinitis_pipeline.py
+    research_results
+    evaluation_results
+    main.py
+```
+
+---
+
+## 🚀 Inicio Rápido
 
 ```bash
-git clone https://github.com/your-user/pharma_loop_engineering
-cd pharma_loop_engineering
+git clone https://github.com/AngelTroncoso/solucionaenfermedades.git
+cd solucionaenfermedades
 pip install -r requirements.txt
-cp .env.example .env          # add your OpenRouter API key
+cp .env.example .env          # agrega tu API key de OpenRouter
 python main.py
 ```
 
-### Run the dashboard
-
+**Dashboard:**
 ```bash
+# Windows con Anaconda
+C:\ProgramData\anaconda3\python.exe -m streamlit run dashboard/results_viewer.py
+
+# Otros entornos
 streamlit run dashboard/results_viewer.py
 ```
 
-### Run tests
-
+**Tests:**
 ```bash
 pytest tests/ -v --asyncio-mode=auto
 ```
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Configuración
 
 ```python
-# config/settings.py — key parameters
-MODEL_REASONING   = "qwen/qwen3-235b-a22b"    # deep hypothesis generation
-MODEL_FAST        = "qwen/qwen2.5-72b-instruct" # evaluation & refinement
+# config/settings.py
+MODEL_REASONING   = "qwen/qwen3-235b-a22b"       # hipótesis profundas
+MODEL_FAST        = "qwen/qwen2.5-72b-instruct"   # evaluación y refinement
+MODEL_LIGHT       = "qwen/qwen2.5-7b-instruct"    # tareas simples
 MAX_ITERATIONS    = 10
 FITNESS_THRESHOLD = 0.80
-POPULATION_SIZE   = 10     # Sakana FuGU population
+POPULATION_SIZE   = 10
 MUTATION_RATE     = 0.30
-EARLY_STOP_ROUNDS = 3      # stop refining if no gain after 3 cycles
+EARLY_STOP_ROUNDS = 3
+```
+
+```env
+# .env
+OPENROUTER_API_KEY=your_key_here
+MODEL_REASONING=qwen/qwen3-235b-a22b
+MODEL_FAST=qwen/qwen2.5-72b-instruct
+FITNESS_THRESHOLD=0.80
+MAX_ITERATIONS=10
 ```
 
 ---
 
-## 🧪 Approved Drug Seed Database
+## 🧪 Base de Fármacos Aprobados
 
-The engine starts from a curated set of approved drugs with known molecular targets, including: Montelukast, Dupilumab, Omalizumab, Mepolizumab, Azelastine, Ciclesonide, Ketotifen, Bilastine, Rupatadine, Azithromycin (immunomodulatory), and low-dose Methotrexate.
+```mermaid
+classDiagram
+    class ApprovedDrug {
+        +String nombre
+        +String DCI
+        +String mecanismo_accion
+        +String targets_moleculares
+        +String indicaciones_aprobadas
+        +String efectos_adversos
+        +String estado_patente
+        +String biodisponibilidad
+        +String via_administracion
+    }
 
-Each entry includes: mechanism of action, molecular targets, approved indications, adverse effect profile, patent status, and bioavailability.
+    class Montelukast { CYSLT1 · Leucotrienos · Genérico }
+    class Dupilumab { IL-4Rα · Th2 · Patente 2031 }
+    class Omalizumab { IgE libre · FcεRI · Genérico 2023 }
+    class Mepolizumab { IL-5 · Eosinófilos · Patente 2033 }
+    class Azelastina { H1 · Tópico nasal · Genérico }
+    class Ciclesonida { Glucocorticoide · Nasal · Genérico }
+    class Ketotifeno { H1 + Mastocitos · Oral · Genérico }
+    class Bilastina { H1 3ªGen · Oral · Patente 2034 }
+    class Rupatadina { H1 + 5HT2 · Oral · Genérico 2024 }
+    class Azitromicina { TNFα IL6 IL8 · Inmunomod · Genérico }
+
+    ApprovedDrug <|-- Montelukast
+    ApprovedDrug <|-- Dupilumab
+    ApprovedDrug <|-- Omalizumab
+    ApprovedDrug <|-- Mepolizumab
+    ApprovedDrug <|-- Azelastina
+    ApprovedDrug <|-- Ciclesonida
+    ApprovedDrug <|-- Ketotifeno
+    ApprovedDrug <|-- Bilastina
+    ApprovedDrug <|-- Rupatadina
+    ApprovedDrug <|-- Azitromicina
+```
 
 ---
 
-## 🔬 Sakana FuGU — Evolutionary Agent
+## 🔬 Sakana FuGU — Agente Evolutivo
 
-Inspired by the [Sakana AI Scientist](https://github.com/SakanaAI/AI-Scientist), the FuGU agent runs population-based search across drug-disease hypothesis space:
+```mermaid
+flowchart LR
+    A[🌱 Población inicial\nN hipótesis] --> B[📊 Evaluar fitness\n5 dimensiones]
+    B --> C{fitness ≥ 0.80?}
+    C -->|✅| D[(💾 Publicar\nhipótesis)]
+    C -->|❌| E[🏆 Selección torneo\ntop 30%]
+    E --> F[🔀 Crossover\nmecanismos padre]
+    F --> G[🎲 Mutación\ndosis / vía / combinación]
+    G --> H{¿Convergió?}
+    H -->|❌| B
+    H -->|✅| I([🏁 Mejor hipótesis])
 
-1. **Initialize** — sample N hypothesis combinations from the drug database  
-2. **Evaluate** — score each with the multidimensional fitness function  
-3. **Select** — tournament selection, top 30% survive  
-4. **Crossover** — merge molecular mechanisms from two parent hypotheses  
-5. **Mutate** — vary dosage, route of administration, or drug combination  
-6. **Repeat** — until convergence or max generations reached  
+    style D fill:#166534,color:#fff
+    style I fill:#1e3a5f,color:#fff
+```
 
-Checkpoints are saved every 3 generations to `data/drug_database/evolution_memory.json`.
-
----
-
-## 📊 Results Dashboard
-
-The Streamlit dashboard (`dashboard/results_viewer.py`) provides:
-
-- Fitness evolution curve by generation
-- Top-10 hypotheses table per disease target
-- Drill-down: proposed mechanism + evidence + score breakdown
-- Export selected hypotheses to PDF
+Checkpoints guardados cada 3 generaciones en `data/drug_database/evolution_memory.json`.
 
 ---
 
-## 🤝 Contributing
+## 📊 Historial del Repositorio
 
-This is an active research project. Issues and PRs are welcome, especially:
-- New disease targets with Th2/inflammatory profiles
-- Additional approved drugs with immunomodulatory evidence
-- Improved fitness weighting schemes
+```mermaid
+gitGraph
+   commit id: "first commit"
+   commit id: "avance 1"
+   branch feature/loop-engineering
+   checkout feature/loop-engineering
+   commit id: "agents: researcher + evaluator"
+   commit id: "agents: refiner + sakana_fugu"
+   commit id: "config: settings + domain_knowledge"
+   commit id: "prompts: rhinitis ARIA 2020"
+   commit id: "data: approved_drugs.json UTF-8"
+   commit id: "dashboard: streamlit + plotly"
+   commit id: "tests: loop + fugu + pipeline E2E"
+   checkout main
+   merge feature/loop-engineering id: "feat: loop engineering completo"
+   commit id: "Add evaluation and research results"
+```
+
+---
+
+## 🤝 Contribuir
+
+Proyecto de investigación activa. PRs e issues bienvenidos, especialmente:
+- Nuevas enfermedades objetivo con perfil Th2/inflamatorio
+- Fármacos aprobados adicionales con evidencia inmunomoduladora
+- Mejoras en los pesos del fitness multidimensional
 
 ---
 
 <div align="center">
 
-Made with 🧬 and async Python · Powered exclusively by [Qwen](https://huggingface.co/Qwen)
+Hecho con 🧬 y Python async · Powered exclusively by [Qwen](https://huggingface.co/Qwen)
+
+**Santiago de Chile · 2026**
 
 </div>
