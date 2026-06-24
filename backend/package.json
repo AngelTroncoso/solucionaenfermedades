@@ -1,0 +1,14 @@
+{
+  "name": "solucionaenfermedades-backend",
+  "version": "1.0.0",
+  "description": "Python backend for pharmaceutical discovery using AI agents",
+  "main": "main.py",
+  "scripts": {
+    "start": "python main.py --start",
+    "dashboard": "python main.py --dashboard",
+    "status": "python main.py --status",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

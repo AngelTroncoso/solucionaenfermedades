@@ -1,0 +1,36 @@
+===== PYTHON =====
+__pycache__/
+
+*.pyc
+
+*.pyo
+
+.env
+
+backend/.env
+
+backend/research_results/
+
+backend/evaluation_results/
+
+backend/logs/
+
+backend/data/drug_database/evolution_memory.json
+
+*.egg-info/
+
+.venv/
+===== NODE =====
+frontend/node_modules/
+
+frontend/dist/
+
+frontend/.env
+
+frontend/.env.local
+===== GENERAL =====
+.DS_Store
+
+*.log
+
+Thumbs.db
