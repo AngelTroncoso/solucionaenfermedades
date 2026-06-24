@@ -1,0 +1,465 @@
+# =============================================================================
+# BASE DE CONOCIMIENTO FARMACOLÓGICA - Pharma Loop Engineering
+# =============================================================================
+# Este archivo contiene el conocimiento del dominio de reposicionamiento de
+# fármacos. Está SEPARADO de los prompts del sistema (en system_prompts/)
+# para permitir actualizar los datos médicos sin modificar la lógica de los
+# agentes.
+#
+# Propósito: Proveer contexto farmacológico estructurado para que los agentes
+#            puedan tomar decisiones informadas sobre drug repurposing.
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# 1. CRITERIOS DE REPOSICIONAMIENTO (Drug Repurposing Criteria)
+# ---------------------------------------------------------------------------
+# Define los umbrales y reglas para decidir si un fármaco puede ser
+# reposicionado para una nueva enfermedad.
+criterios_reposicionamiento:
+  score_proceed: 75    # Score mínimo para recomendar PROCEED (pasar a validación experimental)
+  score_refine: 50     # Score mínimo para recomendar REFINE (requiere ajustes)
+  score_abort: 0       # Por debajo de este score se recomienda ABORTAR
+
+  factores_clave:
+    - "Evidencia de que el fármaco interactúa con un target relevante para la enfermedad"
+    - "Existencia de estudios preclínicos o clínicos que sugieran eficacia"
+    - "Perfil de seguridad aceptable para la nueva indicación"
+    - "Ventaja sobre tratamientos existentes (mejor eficacia, menos efectos adversos)"
+    - "Plausibilidad biológica del mecanismo de acción propuesto"
+
+  contraindicaciones_reposicionamiento:
+    - "El fármaco tiene efectos adversos que contraindican su uso en la población objetivo"
+    - "El mecanismo de acción del fármaco es antagónico a la fisiopatología de la enfermedad"
+    - "Existen tratamientos aprobados significativamente mejores"
+    - "El fármaco no alcanza concentraciones terapéuticas en el tejido diana"
+
+# ---------------------------------------------------------------------------
+# 2. FÁRMACOS CONOCIDOS (Known Drugs Database)
+# ---------------------------------------------------------------------------
+# Base de datos de fármacos aprobados con potencial de reposicionamiento.
+# Cada entrada incluye: mecanismo de acción, indicaciones aprobadas, y
+# propiedades farmacológicas relevantes.
+farmacos_conocidos:
+  Metformina:
+    clase_terapeutica: "Biguanida"
+    mecanismo_accion: "Activación de AMPK, inhibición de gluconeogénesis hepática"
+    indicaciones_aprobadas:
+      - "Diabetes mellitus tipo 2"
+    propiedades_fisicoquimicas:
+      peso_molecular: 129.16
+      logP: -1.3
+      solubilidad: "Alta (hidrosoluble)"
+    targets_conocidos:
+      - "AMPK"
+      - "Mito-complex I"
+      - "GDF15"
+    efectos_adversos:
+      - "Acidosis láctica (raro)"
+      - "Trastornos gastrointestinales"
+    potencial_reposicionamiento:
+      - "Cáncer (activación AMPK inhibe proliferación)"
+      - "Envejecimiento (efectos sobre longevidad)"
+      - "Enfermedades cardiovasculares"
+
+  Disulfiram:
+    clase_terapeutica: "Inhibidor de aldehído deshidrogenasa"
+    mecanismo_accion: "Inhibición de ALDH1A1 y ALDH2, quelación de metales"
+    indicaciones_aprobadas:
+      - "Alcoholismo crónico"
+    propiedades_fisicoquimicas:
+      peso_molecular: 296.54
+      logP: 3.88
+      solubilidad: "Baja"
+    targets_conocidos:
+      - "ALDH1A1"
+      - "ALDH2"
+      - "Proteasoma (inhibición)"
+      - "Metalo-β-lactamasas"
+    efectos_adversos:
+      - "Hepatotoxicidad"
+      - "Neuropatía periférica"
+    potencial_reposicionamiento:
+      - "Cáncer (inhibición de ALDH en células madre cancerosas)"
+      - "Fibrosis quística (modulación CFTR)"
+      - "Infecciones bacterianas resistentes"
+
+  Nitazoxanida:
+    clase_terapeutica: "Antiparasitario (tiazólido)"
+    mecanismo_accion: "Inhibición de piruvato:ferredoxin oxidorreductasa (PFOR)"
+    indicaciones_aprobadas:
+      - "Giardiasis"
+      - "Criptosporidiosis"
+    propiedades_fisicoquimicas:
+      peso_molecular: 307.28
+      logP: 2.8
+      solubilidad: "Moderada"
+    targets_conocidos:
+      - "PFOR"
+      - "Proteínas de unión a heparina"
+      - "mTOR (modulación indirecta)"
+    efectos_adversos:
+      - "Leves (dolor abdominal, náuseas)"
+    potencial_reposicionamiento:
+      - "Infecciones virales (VRS, influenza, rotavirus)"
+      - "Cáncer (inhibición de vías metabólicas)"
+      - "Enfermedades inflamatorias"
+
+  Sildenafil:
+    clase_terapeutica: "Inhibidor de PDE5"
+    mecanismo_accion: "Inhibición de fosfodiesterasa 5, aumento de cGMP"
+    indicaciones_aprobadas:
+      - "Disfunción eréctil"
+      - "Hipertensión arterial pulmonar"
+    propiedades_fisicoquimicas:
+      peso_molecular: 474.58
+      logP: 2.7
+      solubilidad: "Baja"
+    targets_conocidos:
+      - "PDE5"
+      - "PDE6 (baja afinidad)"
+    efectos_adversos:
+      - "Cefalea"
+      - "Rubor facial"
+      - "Dispepsia"
+    potencial_reposicionamiento:
+      - "Preeclampsia (vasodilatación placentaria)"
+      - "Enfermedad de Alzheimer (mejora flujo cerebral)"
+      - "Insuficiencia cardíaca"
+
+  Pentoxifilina:
+    clase_terapeutica: "Derivado de xantina"
+    mecanismo_accion: "Inhibición de TNF-α, mejora de deformabilidad eritrocitaria"
+    indicaciones_aprobadas:
+      - "Enfermedad vascular periférica"
+    propiedades_fisicoquimicas:
+      peso_molecular: 278.31
+      logP: 0.3
+      solubilidad: "Moderada"
+    targets_conocidos:
+      - "TNF-α (inhibición de síntesis)"
+      - "Fosfodiesterasas"
+      - "NF-κB (modulación)"
+    efectos_adversos:
+      - "Náuseas"
+      - "Mareos"
+      - "Hipotensión"
+    potencial_reposicionamiento:
+      - "Fibrosis hepática (anti-TNF-α)"
+      - "Enfermedad de Alzheimer (antiinflamatorio)"
+      - "Sepsis (modulación de respuesta inflamatoria)"
+
+  Aspirina:
+    clase_terapeutica: "AINE (Antiinflamatorio No Esteroideo)"
+    mecanismo_accion: "Inhibición irreversible de COX-1 y COX-2"
+    indicaciones_aprobadas:
+      - "Dolor leve a moderado"
+      - "Fiebre"
+      - "Prevención de eventos cardiovasculares"
+    propiedades_fisicoquimicas:
+      peso_molecular: 180.16
+      logP: 1.2
+      solubilidad: "Moderada"
+    targets_conocidos:
+      - "COX-1"
+      - "COX-2"
+    efectos_adversos:
+      - "Hemorragia gastrointestinal"
+      - "Síndrome de Reye (en niños)"
+    potencial_reposicionamiento:
+      - "Cáncer colorrectal (quimioprevención)"
+      - "Preeclampsia (prevención)"
+      - "Enfermedad de Alzheimer"
+
+  Rapamicina:
+    clase_terapeutica: "Inhibidor de mTOR (macrólido)"
+    mecanismo_accion: "Inhibición de mTORC1 mediante unión a FKBP12"
+    indicaciones_aprobadas:
+      - "Inmunosupresión en trasplante renal"
+      - "Linfangioleiomiomatosis (LAM)"
+    propiedades_fisicoquimicas:
+      peso_molecular: 914.17
+      logP: 4.3
+      solubilidad: "Baja"
+    targets_conocidos:
+      - "mTORC1"
+      - "FKBP12"
+    efectos_adversos:
+      - "Hiperlipidemia"
+      - "Hiperglucemia"
+      - "Inmunosupresión"
+    potencial_reposicionamiento:
+      - "Longevidad (inhibición de mTOR en envejecimiento)"
+      - "Cáncer (inhibición de proliferación)"
+      - "Enfermedades neurodegenerativas"
+
+# ---------------------------------------------------------------------------
+# 3. ENFERMEDADES OBJETIVO (Target Diseases)
+# ---------------------------------------------------------------------------
+# Enfermedades con potencial de ser tratadas mediante reposicionamiento.
+enfermedades:
+  Cáncer de páncreas:
+    categoria: "Oncológica"
+    prevalencia: "Baja (3% de cánceres, pero alta mortalidad)"
+    necesidad_medica: "Crítica (supervivencia a 5 años < 10%)"
+    targets_potenciales:
+      - "KRAS (mutación en >90% de casos)"
+      - "EGFR"
+      - "AMPK"
+      - "mTOR"
+    biomarcadores:
+      - "CA19-9"
+      - "KRAS mutado"
+    tratamientos_actuales:
+      - "Gemcitabina"
+      - "FOLFIRINOX"
+      - "Cirugía (solo 20% son resecables)"
+
+  Fibrosis quística:
+    categoria: "Genética rara"
+    prevalencia: "1:3000-1:8000 nacimientos"
+    necesidad_medica: "Alta (enfermedad progresiva, esperanza de vida ~40 años)"
+    targets_potenciales:
+      - "CFTR (proteína defectuosa)"
+      - "Canales iónicos alternativos"
+      - "Inflamación (TNF-α, IL-8)"
+    biomarcadores:
+      - "Cloro en sudor (>60 mmol/L)"
+      - "Mutaciones en CFTR"
+    tratamientos_actuales:
+      - "Moduladores de CFTR (ivacaftor, lumacaftor)"
+      - "Antibióticos inhalados"
+      - "Dornasa alfa"
+
+  Infección por VRS:
+    categoria: "Infecciosa viral"
+    prevalencia: "Alta (causa principal de bronquiolitis en niños)"
+    necesidad_medica: "Alta (no hay vacuna efectiva, tratamiento limitado)"
+    targets_potenciales:
+      - "Proteína F de VRS"
+      - "Proteína G de VRS"
+      - "Polimerasa viral"
+    biomarcadores:
+      - "PCR para VRS"
+      - "Antígeno viral"
+    tratamientos_actuales:
+      - "Ribavirina (uso limitado)"
+      - "Palivizumab (profilaxis en alto riesgo)"
+      - "Cuidados de soporte"
+
+  Preeclampsia:
+    categoria: "Obstétrica"
+    prevalencia: "5-8% de embarazos"
+    necesidad_medica: "Alta (causa principal de mortalidad materna)"
+    targets_potenciales:
+      - "eNOS (óxido nítrico sintasa endotelial)"
+      - "sGC (guanilato ciclasa soluble)"
+      - "VEGFR1/sFlt-1"
+      - "PlGF"
+    biomarcadores:
+      - "sFlt-1/PlGF ratio"
+      - "Proteinuria"
+      - "Presión arterial"
+    tratamientos_actuales:
+      - "Antihipertensivos (labetalol, nifedipino)"
+      - "Sulfato de magnesio (prevención de eclampsia)"
+      - "Inducción del parto (única cura definitiva)"
+
+  Fibrosis hepática:
+    categoria: "Hepática crónica"
+    prevalencia: "Alta (asociada a NAFLD, hepatitis virales, alcohol)"
+    necesidad_medica: "Alta (progresa a cirrosis, no hay tratamiento antifibrótico aprobado)"
+    targets_potenciales:
+      - "TGF-β (factor profibrótico principal)"
+      - "PPAR-α/γ"
+      - "FXR"
+      - "Células estrelladas hepáticas (HSC)"
+      - "TNF-α"
+    biomarcadores:
+      - "FibroScan (elastografía)"
+      - "FIB-4 score"
+      - "APRI score"
+    tratamientos_actuales:
+      - "Tratar causa subyacente (antivirales, alcohol)"
+      - "Vitamina E (en NASH)"
+      - "Trasplante hepático (estadio final)"
+
+# ---------------------------------------------------------------------------
+# 4. CATEGORÍAS DE ENFERMEDADES (Disease Categories)
+# ---------------------------------------------------------------------------
+# Agrupación de enfermedades por categoría para selección de targets.
+categorias_enfermedades:
+  cancer:
+    - "Cáncer de páncreas"
+    - "Cáncer colorrectal"
+    - "Cáncer de mama"
+    - "Cáncer de pulmón"
+    - "Cáncer de próstata"
+    - "Leucemia"
+    - "Linfoma"
+  fibrosis:
+    - "Fibrosis quística"
+    - "Fibrosis hepática"
+    - "Fibrosis pulmonar idiopática"
+    - "Fibrosis renal"
+    - "Cirrosis hepática"
+  viral_infection:
+    - "Infección por VRS"
+    - "Influenza"
+    - "COVID-19"
+    - "Hepatitis B"
+    - "Hepatitis C"
+    - "VIH"
+  preeclampsia:
+    - "Preeclampsia"
+    - "Eclampsia"
+    - "Síndrome HELLP"
+  liver_disease:
+    - "Fibrosis hepática"
+    - "NAFLD"
+    - "NASH"
+    - "Cirrosis hepática"
+    - "Hepatitis alcohólica"
+  neurodegenerative:
+    - "Enfermedad de Alzheimer"
+    - "Enfermedad de Parkinson"
+    - "Esclerosis lateral amiotrófica (ELA)"
+    - "Esclerosis múltiple"
+  cardiovascular:
+    - "Hipertensión arterial pulmonar"
+    - "Insuficiencia cardíaca"
+    - "Aterosclerosis"
+    - "Enfermedad vascular periférica"
+
+# ---------------------------------------------------------------------------
+# 5. TARGETS MOLECULARES (Molecular Targets)
+# ---------------------------------------------------------------------------
+# Diccionario de targets moleculares con información relevante.
+targets_moleculares:
+  AMPK:
+    nombre_completo: "Proteína quinasa activada por AMP"
+    tipo: "Quinasa"
+    via: "Metabolismo energético"
+    enfermedades_asociadas:
+      - "Diabetes tipo 2"
+      - "Cáncer"
+      - "Enfermedades cardiovasculares"
+    farmacos_moduladores:
+      - "Metformina (activador)"
+      - "AICAR (activador)"
+
+  mTOR:
+    nombre_completo: "Mammalian Target of Rapamycin"
+    tipo: "Quinasa"
+    via: "Crecimiento y proliferación celular"
+    enfermedades_asociadas:
+      - "Cáncer"
+      - "Envejecimiento"
+      - "Enfermedades neurodegenerativas"
+    farmacos_moduladores:
+      - "Rapamicina (inhibidor)"
+      - "Everolimus (inhibidor)"
+
+  CFTR:
+    nombre_completo: "Cystic Fibrosis Transmembrane Conductance Regulator"
+    tipo: "Canal iónico"
+    via: "Transporte de cloro"
+    enfermedades_asociadas:
+      - "Fibrosis quística"
+    farmacos_moduladores:
+      - "Ivacaftor (potenciador)"
+      - "Lumacaftor (corrector)"
+
+  TNF-α:
+    nombre_completo: "Factor de Necrosis Tumoral alfa"
+    tipo: "Citocina"
+    via: "Inflamación"
+    enfermedades_asociadas:
+      - "Artritis reumatoide"
+      - "Enfermedad inflamatoria intestinal"
+      - "Fibrosis hepática"
+      - "Sepsis"
+    farmacos_moduladores:
+      - "Pentoxifilina (inhibidor de síntesis)"
+      - "Infliximab (anticuerpo monoclonal)"
+      - "Adalimumab (anticuerpo monoclonal)"
+
+  PDE5:
+    nombre_completo: "Fosfodiesterasa 5"
+    tipo: "Fosfodiesterasa"
+    via: "Señalización de cGMP"
+    enfermedades_asociadas:
+      - "Disfunción eréctil"
+      - "Hipertensión arterial pulmonar"
+      - "Preeclampsia"
+    farmacos_moduladores:
+      - "Sildenafil (inhibidor)"
+      - "Tadalafil (inhibidor)"
+
+# ---------------------------------------------------------------------------
+# 6. MECANISMOS DE ACCIÓN (Mechanisms of Action)
+# ---------------------------------------------------------------------------
+# Descripción de mecanismos de acción relevantes para reposicionamiento.
+mecanismos_accion:
+  activacion_AMPK:
+    descripcion: "Activación de la proteína quinasa AMPK, regulador maestro del metabolismo energético"
+    efectos: "Inhibición de proliferación celular, mejora de sensibilidad a insulina"
+    farmacos_ejemplo: ["Metformina", "AICAR"]
+    potencial_reposicionamiento: "Cáncer, envejecimiento, enfermedades metabólicas"
+
+  inhibicion_mTOR:
+    descripcion: "Inhibición del complejo mTORC1, regulador del crecimiento celular"
+    efectos: "Supresión de proliferación, inducción de autofagia"
+    farmacos_ejemplo: ["Rapamicina", "Everolimus"]
+    potencial_reposicionamiento: "Cáncer, longevidad, enfermedades neurodegenerativas"
+
+  inhibicion_TNF:
+    descripcion: "Inhibición de la síntesis o actividad del Factor de Necrosis Tumoral alfa"
+    efectos: "Reducción de inflamación, modulación de respuesta inmune"
+    farmacos_ejemplo: ["Pentoxifilina", "Infliximab"]
+    potencial_reposicionamiento: "Fibrosis hepática, Alzheimer, sepsis"
+
+  vasodilatacion_NO:
+    descripcion: "Vasodilatación mediada por óxido nítrico y vía cGMP"
+    efectos: "Mejora de flujo sanguíneo, reducción de presión arterial"
+    farmacos_ejemplo: ["Sildenafil", "Tadalafil"]
+    potencial_reposicionamiento: "Preeclampsia, Alzheimer vascular"
+
+  inhibicion_ALDH:
+    descripcion: "Inhibición de aldehído deshidrogenasa, enzima metabólica"
+    efectos: "Acumulación de aldehídos tóxicos, inhibición de células madre cancerosas"
+    farmacos_ejemplo: ["Disulfiram"]
+    potencial_reposicionamiento: "Cáncer, fibrosis quística, infecciones resistentes"
+
+# ---------------------------------------------------------------------------
+# 7. BENCHMARKS DE VALIDACIÓN (Validation Benchmarks)
+# ---------------------------------------------------------------------------
+# Rangos típicos de métricas para diferentes tipos de modelos computacionales.
+benchmarks_validacion:
+  QSAR_RandomForest:
+    dataset: "ChEMBL kinase inhibitors"
+    r2_esperado: [0.5, 0.8]
+    rmse_esperado: [0.6, 1.2]
+    min_muestras: 100
+    interpretacion:
+      r2_mayor_0.7: "Modelo predictivo útil para screening virtual"
+      r2_entre_0.5_0.7: "Modelo moderado, útil para ranking de compuestos"
+      r2_menor_0.5: "Modelo insuficiente, requiere mejora"
+
+  docking_autodock:
+    afinidad_tipica: [-12.0, -6.0]
+    rmsd_aceptable: 2.0
+    min_hits: 10
+    interpretacion:
+      afinidad_menor_menos_9: "Unión fuerte, candidato prometedor"
+      afinidad_entre_menos_9_menos_7: "Unión moderada, requiere optimización"
+      afinidad_mayor_menos_7: "Unión débil, no viable"
+
+  admet_lipinski:
+    tasa_paso: 0.8
+    absorcion_tipica: 0.7
+    reglas:
+      - "Peso molecular < 500 Da"
+      - "LogP < 5"
+      - "Donores de H < 5"
+      - "Aceptores de H < 10"
+      - "Rotatable bonds < 10"

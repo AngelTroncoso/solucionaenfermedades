@@ -1,0 +1,36 @@
+project:
+  name: "Pharma Loop Engineering"
+  version: "1.0.0"
+  max_iterations: 10
+  timeout_hours: 24
+
+llm:
+  provider: "qwen"
+  model: "qwen-max"
+  temperature: 0.7
+  max_tokens: 4096
+  api_key_env: "QWEN_API_KEY"
+
+databases:
+  pubmed:
+    enabled: true
+    max_results: 100
+  chembl:
+    enabled: true
+    base_url: "https://www.ebi.ac.uk/chembl/api/data"
+  drugbank:
+    enabled: false
+
+compute:
+  platform: "local"  # local, colab, kaggle
+  gpu_enabled: false
+  memory_limit_gb: 8
+
+dashboard:
+  port: 8501
+  auto_refresh: true
+  refresh_interval_seconds: 30
+
+logging:
+  level: "INFO"
+  file: "logs/pharma_loop.log"

@@ -1,0 +1,64 @@
+# Prompt templates for LLM interactions
+
+# Research prompts
+research:
+  literature_search: |
+    Search for recent scientific literature on {topic}.
+    Focus on peer-reviewed articles from the last {years} years.
+    Identify key findings, methodologies, and drug candidates.
+  
+  target_analysis: |
+    Analyze the biological target {target_name}.
+    Provide information about its structure, function,
+    and known ligands or inhibitors.
+  
+  patent_search: |
+    Search for patents related to {topic}.
+    Identify novel compounds and synthetic methods.
+
+# Design prompts
+design:
+  molecule_generation: |
+    Generate {num_candidates} novel molecules targeting {target}.
+    Consider Lipinski's Rule of Five and drug-likeness.
+    Provide SMILES strings and estimated properties.
+  
+  property_prediction: |
+    Predict the following properties for the molecules:
+    - LogP (lipophilicity)
+    - Molecular weight
+    - H-bond donors/acceptors
+    - Rotatable bonds
+    - Synthetic accessibility score
+  
+  optimization: |
+    Optimize the following molecules for:
+    1. Improved binding affinity
+    2. Better ADMET properties
+    3. Reduced off-target effects
+
+# Evaluation prompts
+evaluation:
+  result_analysis: |
+    Analyze the following results and provide insights:
+    {results}
+    
+    Identify strengths, weaknesses, and areas for improvement.
+  
+  benchmark_comparison: |
+    Compare these results against:
+    1. Existing drugs for the same target
+    2. State-of-the-art benchmarks
+    3. Random baseline performance
+
+# Code generation prompts
+code_generation:
+  qsar_model: |
+    Generate a QSAR model using the provided dataset.
+    Include data preprocessing, model training,
+    cross-validation, and evaluation metrics.
+  
+  docking_script: |
+    Create a molecular docking script for AutoDock Vina.
+    Include receptor preparation, ligand preparation,
+    docking execution, and result analysis.
