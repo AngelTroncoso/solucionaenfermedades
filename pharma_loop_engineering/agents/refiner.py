@@ -583,14 +583,9 @@ Responde EXACTAMENTE en ese formato JSON.
         )
 
         # Generar plan de refinamiento con el LLM
-        # Usar modelo de razonamiento Qwen para análisis profundo
-        refined_config = self.config.get('refinement_llm_config', {})
-        llm_response = llm_generate(
-            self.llm_plugin, prompt,
-            max_tokens=refined_config.get('max_tokens', 2000),
-            max_retries=self.max_retries,
-            retry_delay=self.retry_delay
-        )
+        # Usar modelo Qwen específico para refinamiento
+        from utils.llm_utils import call_llm
+        llm_response = await call_llm(prompt, role="refiner", system=self.system_prompt)
 
         # Parsear respuesta
         refinement_plan = self._parse_refinement_response(llm_response)

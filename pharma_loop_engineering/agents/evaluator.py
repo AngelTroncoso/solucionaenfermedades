@@ -296,7 +296,7 @@ class EvaluatorAgent:
 
         return anomalies
 
-    def interpret_results(self, metrics: Dict[str, Any], model_type: str, drug: str, disease: str) -> str:
+    async def interpret_results(self, metrics: Dict[str, Any], model_type: str, drug: str, disease: str) -> str:
         """
         Use LLM to interpret results in pharmacological context.
 
@@ -323,10 +323,9 @@ Genera una interpretación farmacológica:
 
 Responde en español, de manera concisa pero técnica.
 """
-        # Usar LLM centralizado con contexto de sistema
-        from utils.llm_utils import llm_generate as central_llm
-        return central_llm(self.llm_plugin, prompt, max_tokens=1500,
-                           max_retries=self.max_retries, retry_delay=self.retry_delay)
+        # Usar LLM centralizado con contexto de sistema y modelo Qwen específico
+        from utils.llm_utils import call_llm
+        return await call_llm(prompt, role="evaluation", system=self.system_prompt)
 
     def generate_recommendation(self, metrics: Dict[str, Any], validation: Dict[str, Any],
                                anomalies: List[str], confidence_score: int) -> str:
@@ -415,7 +414,7 @@ Genera:
 
         return max(0, min(100, score))
 
-    def evaluate(self, implementation_report: Dict[str, Any]) -> Dict[str, Any]:
+    async def evaluate(self, implementation_report: Dict[str, Any]) -> Dict[str, Any]:
         """
         Main evaluation pipeline.
 

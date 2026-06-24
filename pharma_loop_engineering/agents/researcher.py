@@ -111,7 +111,7 @@ class ResearcherAgent:
             score += 10
         return min(score, 100)
 
-    def research(self, task: Dict[str, Any]) -> Dict[str, Any]:
+    async def research(self, task: Dict[str, Any]) -> Dict[str, Any]:
         """Execute research phase for a drug repositioning task."""
         # Accept either task dict with metadata or direct params
         metadata = task.get('metadata', task)
@@ -182,10 +182,9 @@ Basándote en el contexto farmacológico proporcionado:
 3. Sugiere 2-3 hipótesis de reposicionamiento específicas y comprobables.
 4. Evalúa la viabilidad científica del reposicionamiento para encontrar una cura.
 """
-        # Usar LLM centralizado con contexto de sistema
-        from utils.llm_utils import llm_generate as central_llm
-        llm_summary = central_llm(self.llm_plugin, prompt, max_tokens=1500,
-                                   max_retries=self.max_retries, retry_delay=self.retry_delay)
+        # Usar LLM centralizado con contexto de sistema y modelo Qwen específico
+        from utils.llm_utils import call_llm
+        llm_summary = await call_llm(prompt, role="reasoning", system=self.system_prompt)
 
         # Build structured report
         relevance_score = self._calculate_relevance_score(

@@ -6,14 +6,68 @@ Elimina la duplicacion de codigo detectada en la auditoria (6 copias identicas d
 import time
 import json
 import yaml
+import os
+import httpx
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Callable
 from loguru import logger
+from config.settings import (
+    MODEL_REASONING, MODEL_EVALUATION, MODEL_REFINER, MODEL_LIGHT,
+    DASHSCOPE_BASE_URL, DASHSCOPE_API_KEY,
+    OPENROUTER_BASE_URL, OPENROUTER_API_KEY,
+    LLM_PROVIDER
+)
 
 # Cache for loaded prompts and domain knowledge
 _PROMPT_CACHE: Dict[str, str] = {}
 _DOMAIN_CACHE: Optional[Dict[str, Any]] = None
 
+def get_api_config():
+    """Retorna base_url y api_key según el proveedor activo."""
+    if LLM_PROVIDER == "dashscope":
+        return DASHSCOPE_BASE_URL, DASHSCOPE_API_KEY
+    return OPENROUTER_BASE_URL, OPENROUTER_API_KEY
+
+async def call_llm(prompt: str, role: str = "reasoning", system: str = None) -> str:
+    """
+    role puede ser: "reasoning", "evaluation", "refiner", "light"
+    Selecciona automáticamente el modelo Qwen correcto según el rol.
+    """
+    model_map = {
+        "reasoning":  MODEL_REASONING,
+        "evaluation": MODEL_EVALUATION,
+        "refiner":    MODEL_REFINER,
+        "light":      MODEL_LIGHT,
+    }
+    model = model_map.get(role, MODEL_LIGHT)
+    base_url, api_key = get_api_config()
+
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    messages.append({"role": "user", "content": prompt})
+
+    try:
+        async with httpx.AsyncClient(timeout=120) as client:
+            response = await client.post(
+                f"{base_url}/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": model,
+                    "messages": messages,
+                    "max_tokens": 4096,
+                    "temperature": 0.7,
+                }
+            )
+            response.raise_for_status()
+            data = response.json()
+            return data["choices"][0]["message"]["content"]
+
+    except Exception as e:
+        raise RuntimeError(f"[LLM ERROR] modelo={model} rol={role} error={e}")
 
 def retry_api_call(func: Callable, *args, max_retries: int = 3, retry_delay: int = 1, **kwargs):
     """
@@ -36,7 +90,6 @@ def retry_api_call(func: Callable, *args, max_retries: int = 3, retry_delay: int
                 time.sleep(wait_time)
     raise last_error
 
-
 def llm_generate(llm_plugin, prompt: str, max_tokens: int = 1000,
                  max_retries: int = 3, retry_delay: int = 1) -> str:
     """
@@ -54,7 +107,6 @@ def llm_generate(llm_plugin, prompt: str, max_tokens: int = 1000,
     except Exception as e:
         logger.error(f"LLM generation failed: {e}")
         return ""
-
 
 def load_system_prompt(prompt_name: str, prompts_dir: str = None) -> str:
     """
@@ -81,7 +133,6 @@ def load_system_prompt(prompt_name: str, prompts_dir: str = None) -> str:
     except Exception as e:
         logger.error(f"Failed to load system prompt {prompt_name}: {e}")
         return ""
-
 
 def load_domain_knowledge(config_path: str = None) -> Dict[str, Any]:
     """
@@ -111,7 +162,6 @@ def load_domain_knowledge(config_path: str = None) -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Failed to load domain knowledge: {e}")
         return {}
-
 
 def build_drug_repurposing_context(
     drug_name: str,
@@ -178,15 +228,22 @@ def build_drug_repurposing_context(
 
     return "\n".join(sections)
 
-
 def clear_prompt_cache() -> None:
     """Clear the system prompt cache."""
     _PROMPT_CACHE.clear()
     logger.info("System prompt cache cleared")
-
 
 def clear_domain_cache() -> None:
     """Clear the domain knowledge cache."""
     global _DOMAIN_CACHE
     _DOMAIN_CACHE = None
     logger.info("Domain knowledge cache cleared")
+<task_progress>
+- [x] PASO 1: Auditoría de modelos actuales (completado)
+- [x] PASO 2: Actualizar config/settings.py con distribución Qwen (completado)
+- [x] PASO 3: Actualizar utils/llm_utils.py (completado)
+- [ ] PASO 4: Asignar modelo correcto en cada agente
+- [ ] PASO 5: Actualizar .env.example
+- [ ] PASO 6: Verificación final
+</task_progress>
+</write_to_file>
