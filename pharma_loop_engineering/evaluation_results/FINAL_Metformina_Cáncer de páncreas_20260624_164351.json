@@ -1,0 +1,27 @@
+{
+  "type": "FINAL_DISEASE_REPORT",
+  "drug": "Metformina",
+  "disease": "Cáncer de páncreas",
+  "seed_hypothesis": "Metformina como agente antiproliferativo en cáncer de páncreas mediante activación de AMPK y supresión de mTOR, reduciendo la viabilidad de células tumorales.",
+  "best_hypothesis": "Metformina como agente antiproliferativo en cáncer de páncreas mediante activación de AMPK y supresión de mTOR, reduciendo la viabilidad de células tumorales.",
+  "best_score": 0.5,
+  "threshold": 0.8,
+  "threshold_reached": false,
+  "total_iterations": 10,
+  "max_iterations": 10,
+  "no_improvement_count": 0,
+  "completed": true,
+  "converged": false,
+  "aborted": false,
+  "total_cycles": 1,
+  "score_progression": [
+    {
+      "iteration": 10,
+      "score": 0.5,
+      "passed": false,
+      "mutated": true
+    }
+  ],
+  "datetime": "2026-06-24T16:43:51.962982",
+  "timestamp": 1782333831.9630487
+}

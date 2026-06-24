@@ -1,0 +1,33 @@
+{
+  "drug": "Disulfiram",
+  "disease": "Cáncer de mama",
+  "iteration": 10,
+  "total_iterations": 10,
+  "hypothesis": "Disulfiram podría tener efecto terapéutico en Cáncer de mama",
+  "evaluation_scores": {
+    "mecanismo_biológico": 50,
+    "evidencia_clínica": 50,
+    "seguridad": 50,
+    "novedad": 50,
+    "viabilidad_ensayo": 50
+  },
+  "score_avg": 50.0,
+  "score_normalized": 0.5,
+  "passed": false,
+  "threshold": 0.8,
+  "refinement_suggestion": "Disulfiram podría tener efecto terapéutico en Cáncer de mama",
+  "was_mutated": true,
+  "mutation_source": "Mutation after 3 cycles without improvement",
+  "reason": "CONTINUE_REFINING",
+  "pipeline_state": {
+    "best_score": 0.5,
+    "best_hypothesis": "Disulfiram en cáncer mediante inhibición de ALDH1A1 en células madre cancerosas y quelación de cobre, induciendo estrés oxidativo selectivo.",
+    "no_improvement_count": 0,
+    "completed": false,
+    "converged": false,
+    "aborted": false,
+    "total_cycles": 0
+  },
+  "timestamp": 1782333833.292536,
+  "datetime": "2026-06-24T16:43:53.292536"
+}

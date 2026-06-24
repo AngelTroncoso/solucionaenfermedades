@@ -1,0 +1,81 @@
+{
+  "type": "FINAL_DISEASE_REPORT",
+  "drug": "Disulfiram",
+  "disease": "Cáncer de mama",
+  "seed_hypothesis": "Disulfiram en cáncer mediante inhibición de ALDH1A1 en células madre cancerosas y quelación de cobre, induciendo estrés oxidativo selectivo.",
+  "best_hypothesis": "Disulfiram en cáncer mediante inhibición de ALDH1A1 en células madre cancerosas y quelación de cobre, induciendo estrés oxidativo selectivo.",
+  "best_score": 0.6,
+  "threshold": 0.85,
+  "threshold_reached": false,
+  "total_iterations": 10,
+  "max_iterations": 10,
+  "no_improvement_count": 0,
+  "completed": true,
+  "converged": false,
+  "aborted": false,
+  "total_cycles": 10,
+  "score_progression": [
+    {
+      "iteration": 1,
+      "score": 0.6,
+      "passed": false,
+      "mutated": false
+    },
+    {
+      "iteration": 2,
+      "score": 0.6,
+      "passed": false,
+      "mutated": false
+    },
+    {
+      "iteration": 3,
+      "score": 0.6,
+      "passed": false,
+      "mutated": false
+    },
+    {
+      "iteration": 4,
+      "score": 0.6,
+      "passed": false,
+      "mutated": true
+    },
+    {
+      "iteration": 5,
+      "score": 0.6,
+      "passed": false,
+      "mutated": false
+    },
+    {
+      "iteration": 6,
+      "score": 0.6,
+      "passed": false,
+      "mutated": false
+    },
+    {
+      "iteration": 7,
+      "score": 0.6,
+      "passed": false,
+      "mutated": true
+    },
+    {
+      "iteration": 8,
+      "score": 0.6,
+      "passed": false,
+      "mutated": false
+    },
+    {
+      "iteration": 9,
+      "score": 0.6,
+      "passed": false,
+      "mutated": false
+    },
+    {
+      "iteration": 10,
+      "score": 0.6,
+      "passed": false,
+      "mutated": true
+    }
+  ],
+  "datetime": "2026-06-24T16:19:12.992335",
+  "timestamp": 1782332352.9923866
+}

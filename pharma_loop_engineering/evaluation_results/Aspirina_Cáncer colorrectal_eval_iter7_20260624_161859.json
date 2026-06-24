@@ -1,0 +1,33 @@
+{
+  "drug": "Aspirina",
+  "disease": "Cáncer colorrectal",
+  "iteration": 7,
+  "total_iterations": 7,
+  "hypothesis": "Metformina podría ser efectiva en cáncer de páncreas mediante activación de AMPK",
+  "evaluation_scores": {
+    "mecanismo_biológico": 60,
+    "evidencia_clínica": 55,
+    "seguridad": 70,
+    "novedad": 50,
+    "viabilidad_ensayo": 65
+  },
+  "score_avg": 60,
+  "score_normalized": 0.6,
+  "passed": false,
+  "threshold": 0.85,
+  "refinement_suggestion": "Metformina con dosis alta podría ser más efectiva en cáncer de páncreas mediante inhibición de mTOR",
+  "was_mutated": true,
+  "mutation_source": "Mutation after 3 cycles without improvement",
+  "reason": "CONTINUE_REFINING",
+  "pipeline_state": {
+    "best_score": 0.6,
+    "best_hypothesis": "Aspirina en quimioprevención de cáncer colorrectal mediante inhibición irreversible de COX-2 y modulación de la vía NF-κB, reduciendo la inflamación crónica.",
+    "no_improvement_count": 0,
+    "completed": false,
+    "converged": false,
+    "aborted": false,
+    "total_cycles": 6
+  },
+  "timestamp": 1782332339.2699845,
+  "datetime": "2026-06-24T16:18:59.269984"
+}

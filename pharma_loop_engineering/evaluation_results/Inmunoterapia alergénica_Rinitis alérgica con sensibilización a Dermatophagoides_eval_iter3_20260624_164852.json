@@ -1,0 +1,33 @@
+{
+  "drug": "Inmunoterapia alergénica",
+  "disease": "Rinitis alérgica con sensibilización a Dermatophagoides",
+  "iteration": 3,
+  "total_iterations": 3,
+  "hypothesis": "Omalizumab podría ser efectivo en rinitis alérgica mediante bloqueo de IgE y reducción de la cascada Th2",
+  "evaluation_scores": {
+    "mecanismo_biológico": 85,
+    "evidencia_clínica": 80,
+    "seguridad": 95,
+    "novedad": 60,
+    "viabilidad_ensayo": 85
+  },
+  "score_avg": 81,
+  "score_normalized": 0.81,
+  "passed": true,
+  "threshold": 0.8,
+  "refinement_suggestion": "",
+  "was_mutated": false,
+  "mutation_source": "",
+  "reason": "THRESHOLD_PASSED",
+  "pipeline_state": {
+    "best_score": 0.81,
+    "best_hypothesis": "Omalizumab podría ser efectivo en rinitis alérgica mediante bloqueo de IgE y reducción de la cascada Th2",
+    "no_improvement_count": 0,
+    "completed": false,
+    "converged": false,
+    "aborted": false,
+    "total_cycles": 0
+  },
+  "timestamp": 1782334132.9512987,
+  "datetime": "2026-06-24T16:48:52.951299"
+}

@@ -1,0 +1,33 @@
+{
+  "drug": "Aspirina",
+  "disease": "Cáncer colorrectal",
+  "iteration": 10,
+  "total_iterations": 10,
+  "hypothesis": "Aspirina podría tener efecto terapéutico en Cáncer colorrectal",
+  "evaluation_scores": {
+    "mecanismo_biológico": 50,
+    "evidencia_clínica": 50,
+    "seguridad": 50,
+    "novedad": 50,
+    "viabilidad_ensayo": 50
+  },
+  "score_avg": 50.0,
+  "score_normalized": 0.5,
+  "passed": false,
+  "threshold": 0.8,
+  "refinement_suggestion": "Aspirina podría tener efecto terapéutico en Cáncer colorrectal",
+  "was_mutated": true,
+  "mutation_source": "Mutation after 3 cycles without improvement",
+  "reason": "CONTINUE_REFINING",
+  "pipeline_state": {
+    "best_score": 0.5,
+    "best_hypothesis": "Aspirina en quimioprevención de cáncer colorrectal mediante inhibición irreversible de COX-2 y modulación de la vía NF-κB, reduciendo la inflamación crónica.",
+    "no_improvement_count": 0,
+    "completed": false,
+    "converged": false,
+    "aborted": false,
+    "total_cycles": 0
+  },
+  "timestamp": 1782333831.2553015,
+  "datetime": "2026-06-24T16:43:51.255301"
+}

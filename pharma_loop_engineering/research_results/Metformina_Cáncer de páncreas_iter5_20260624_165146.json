@@ -1,0 +1,22 @@
+{
+  "drug": "Metformina",
+  "disease": "Cáncer de páncreas",
+  "hypothesis": "Metformina podría ser efectiva en cáncer de páncreas mediante activación de AMPK",
+  "evaluation_scores": {
+    "mecanismo_biológico": 80,
+    "evidencia_clínica": 75,
+    "seguridad": 90,
+    "novedad": 70,
+    "viabilidad_ensayo": 85
+  },
+  "score_avg": 80,
+  "score_normalized": 0.8,
+  "threshold": 0.8,
+  "iteration": 5,
+  "total_iterations": 5,
+  "passed": true,
+  "timestamp": 1782334306.6161284,
+  "datetime": "2026-06-24T16:51:46.616128",
+  "was_mutated": false,
+  "mutation_source": ""
+}
