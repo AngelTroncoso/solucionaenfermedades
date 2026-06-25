@@ -14,5 +14,6 @@
   "outputDirectory": "frontend/.output",
   "env": {
     "NODE_OPTIONS": "--max-old-space-size=8192"
-  }
+  },
+  "//": "Cache buster comment to force Vercel to use latest config"
 }
