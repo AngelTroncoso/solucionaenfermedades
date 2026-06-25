@@ -2,15 +2,16 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
+      "src": "frontend/package.json",
+      "use": "@vercel/nitro",
       "config": {
-        "distDir": "frontend/dist"
+        "preset": "vercel"
       }
     }
   ],
-  "installCommand": "npm ci",
-  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/.output",
   "env": {
     "NODE_OPTIONS": "--max-old-space-size=4096"
   }
