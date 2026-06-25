@@ -9,10 +9,10 @@
       }
     }
   ],
-  "installCommand": "npm install",
+  "installCommand": "npm ci",
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/.output",
   "env": {
-    "NODE_OPTIONS": "--max-old-space-size=4096"
+    "NODE_OPTIONS": "--max-old-space-size=8192"
   }
 }
