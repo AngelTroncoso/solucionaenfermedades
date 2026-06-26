@@ -251,9 +251,9 @@ class DashboardManager:
 
 
 @st.cache_data(ttl=30)  # Cache for 30 seconds
-def load_dashboard_data(manager: DashboardManager) -> Dict[str, Any]:
+def load_dashboard_data(_manager: DashboardManager) -> Dict[str, Any]:
     """Load and cache dashboard data."""
-    return manager.load_state()
+    return _manager.load_state()
 
 
 def render_header():

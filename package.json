@@ -10,10 +10,11 @@
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && python main.py --dashboard",
-    "build": "cd frontend && npm install && npm run build",
+    "build": "npm run build:frontend && npm run setup-build-dir",
     "build:frontend": "cd frontend && npm run build",
     "build:backend": "cd backend && echo \"Backend build complete\"",
-    "start": "cd frontend && npm run preview",
+    "setup-build-dir": "node scripts/setup-build-dir.js",
+    "start": "cd build && npm run preview",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "cd frontend && npm run lint",
     "format": "cd frontend && npm run format"
