@@ -1,0 +1,43 @@
+# Archivos y directorios a ignorar en el build de Docker
+
+# Node modules
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Archivos de entorno locales
+.env
+*.env.local
+*.env.*
+
+# Directorios de build generados
+build/
+dist/
+frontend/dist/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de Git
+.git/
+.gitignore
+
+# Archivos de IDE
+.vscode/
+.idea/
+
+# Archivos de log y temporal
+*.log
+tmp/
+temp/
+
+# Archivos de documentación
+docs/
+*.md
+
+# Scripts locales
+scripts/
+
+# Archivos de configuración local
+*.local
