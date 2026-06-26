@@ -21,13 +21,13 @@
 
 ## ✦ Qué hace
 
-Pharma Loop Engineering combina **Loop Engineering** y un **agente evolutivo Sakana FuGU** para descubrir usos terapéuticos nuevos en fármacos ya aprobados por FDA/EMA. En lugar de sintetizar nuevas moléculas, mina perfiles farmacológicos existentes y evoluciona hipótesis hasta alcanzar plausibilidad clínica.
+Pharma Loop Engineering implementa un **pipeline de 6 agentes de IA** para descubrir usos terapéuticos nuevos en fármacos ya aprobados por FDA/EMA. En lugar de sintetizar nuevas moléculas, el sistema analiza perfiles farmacológicos existentes y refina hipótesis iterativamente hasta alcanzar plausibilidad clínica.
 
 **Enfermedades objetivo prioritarias:**
 - 🤧 Rinitis alérgica crónica (primaveral y al polvo) — pipeline especializado con criterios ARIA 2020
 - Extensible a cualquier condición Th2-mediada o inflamatoria
 
-> **Restricción de modelos:** toda la inferencia LLM corre exclusivamente en **modelos Qwen** vía OpenRouter. Sin GPT, Claude, Gemini ni Llama.
+> **Restricción de modelos:** toda la inferencia LLM corre exclusivamente en **modelos Qwen** vía DashScope (Alibaba Cloud) o OpenRouter. Sin GPT, Claude, Gemini ni Llama.
 
 ---
 
@@ -35,32 +35,30 @@ Pharma Loop Engineering combina **Loop Engineering** y un **agente evolutivo Sak
 
 ```mermaid
 flowchart TD
-    A([🚀 main.py]) --> B{Loop Engineering\nmax 10 iteraciones}
+    A([🚀 main.py]) --> B[🎭 Orchestrator\nCoordina pipeline]
 
-    B --> C[🔬 Researcher\nGenera hipótesis]
-    C --> D[⚖️ Evaluator\nPuntúa 5 dimensiones]
-    D --> E{fitness ≥ 0.80?}
+    B --> C[🔬 Researcher\nInvestigación inicial]
+    C --> D[🎨 Designer\nDiseño de hipótesis]
+    D --> E[🛠️ Implementer\nImplementación técnica]
+    E --> F[⚖️ Evaluator\nEvaluación multidimensional]
+    F --> G{confidence ≥ 75%?}
 
-    E -->|✅ Sí| F[(📁 research_results/\nHipótesis publicada)]
-    E -->|❌ No| G[🔁 Refiner\nMejora iterativa]
+    G -->|✅ Sí| H[(📁 research_results/\nHipótesis publicada)]
+    G -->|❌ No| I[🔁 Refiner\nMejora iterativa]
 
-    G --> H{¿Mejoró en\n3 rondas?}
-    H -->|✅ Sí| D
-    H -->|❌ No| I[🧬 Sakana FuGU\nEvolución por población]
+    I --> J{¿Mejoró?}
+    J -->|✅ Sí| F
+    J -->|❌ No| K{¿Max iteraciones?}
+    K -->|❌ No| I
+    K -->|✅ Sí| H
 
-    I --> J[Selección torneo\ntop 30%]
-    J --> K[Crossover\nmecanismos moleculares]
-    K --> L[Mutación\ndosis / vía / combinación]
-    L --> C
-
-    F --> M{¿Más enfermedades\nen cola?}
-    M -->|✅ Sí| B
-    M -->|❌ No| N([🏁 Fin])
+    H --> L{¿Más enfermedades\nen cola?}
+    L -->|✅ Sí| B
+    L -->|❌ No| M([🏁 Fin])
 
     style A fill:#1e3a5f,color:#fff
-    style F fill:#166534,color:#fff
-    style I fill:#581c87,color:#fff
-    style N fill:#1e3a5f,color:#fff
+    style H fill:#166534,color:#fff
+    style M fill:#1e3a5f,color:#fff
 ```
 
 ---
@@ -109,32 +107,57 @@ flowchart LR
 ```mermaid
 mindmap
   root((solucionaenfermedades))
-    agents
-      researcher.py
-      evaluator.py
-      refiner.py
-      sakana_fugu.py
-    config
-      settings.py
-      domain_knowledge.yaml
-      system_prompts
-        researcher_system.md
-        evaluator_system.md
-        refiner_system.md
-        rhinitis_specialist_system.md
-    data
-      drug_database
-        approved_drugs.json
-        evolution_memory.json
-    dashboard
-      results_viewer.py
-    tests
-      test_loop_engineering.py
-      test_sakana_fugu.py
-      test_rhinitis_pipeline.py
-    research_results
-    evaluation_results
-    main.py
+    backend/
+      agents/
+        researcher.py
+        evaluator.py
+        refiner.py
+        designer.py
+        implementer.py
+        orchestrator.py
+      config/
+        settings.py
+        domain_knowledge.yaml
+        system_prompts/
+          researcher_system.md
+          evaluator_system.md
+          refiner_system.md
+        settings.yaml
+        prompts.yaml
+      data/
+        drug_database/
+        results/
+      dashboard/
+        app.py
+        assets/
+        components/
+      plugins/
+        chembl_plugin.py
+        database_plugin.py
+        llm_plugin.py
+        pubmed_plugin.py
+        visualization_plugin.py
+      skills/
+        analysis_skill.py
+        code_generation_skill.py
+        design_skill.py
+        optimization_skill.py
+        research_skill.py
+        visualization_skill.py
+      utils/
+        llm_utils.py
+      worktrees/
+        state_manager.py
+      main.py
+      requirements.txt
+    data/
+      drug_database/
+    evaluation_results/
+    research_results/
+    frontend/
+    logs/
+    .env.example
+    package.json
 ```
 
 ---
@@ -151,11 +174,9 @@ python main.py
 
 **Dashboard:**
 ```bash
-# Windows con Anaconda
-C:\ProgramData\anaconda3\python.exe -m streamlit run dashboard/results_viewer.py
-
-# Otros entornos
-streamlit run dashboard/results_viewer.py
+# Desde el directorio backend/
+cd backend
+python -m streamlit run dashboard/app.py
 ```
 
 **Tests:**
@@ -169,23 +190,28 @@ pytest tests/ -v --asyncio-mode=auto
 
 ```python
 # config/settings.py
-MODEL_REASONING   = "qwen/qwen3-235b-a22b"       # hipótesis profundas
-MODEL_FAST        = "qwen/qwen2.5-72b-instruct"   # evaluación y refinement
-MODEL_LIGHT       = "qwen/qwen2.5-7b-instruct"    # tareas simples
+MODEL_REASONING   = "qwen3-235b-a22b"          # Razonamiento profundo (Researcher)
+MODEL_EVALUATION  = "qwen3-32b"                # Evaluación rápida
+MODEL_REFINER     = "qwen2.5-72b-instruct"    # Refinamiento detallado
+MODEL_LIGHT       = "qwen2.5-7b-instruct"       # Tareas auxiliares
+MODEL_EMBEDDINGS  = "text-embedding-v3"        # Búsqueda semántica
+
 MAX_ITERATIONS    = 10
 FITNESS_THRESHOLD = 0.80
 POPULATION_SIZE   = 10
 MUTATION_RATE     = 0.30
 EARLY_STOP_ROUNDS = 3
+CHECKPOINT_EVERY  = 3
 ```
 
 ```env
 # .env
-OPENROUTER_API_KEY=your_key_here
-MODEL_REASONING=qwen/qwen3-235b-a22b
-MODEL_FAST=qwen/qwen2.5-72b-instruct
-FITNESS_THRESHOLD=0.80
+DASHSCOPE_API_KEY=your_dashscope_key_here
+OPENROUTER_API_KEY=your_openrouter_key_here
+LLM_PROVIDER=dashscope  # o "openrouter"
+
 MAX_ITERATIONS=10
+FITNESS_THRESHOLD=0.80
 ```
 
 ---
@@ -231,27 +257,6 @@ classDiagram
 
 ---
 
-## 🔬 Sakana FuGU — Agente Evolutivo
-
-```mermaid
-flowchart LR
-    A[🌱 Población inicial\nN hipótesis] --> B[📊 Evaluar fitness\n5 dimensiones]
-    B --> C{fitness ≥ 0.80?}
-    C -->|✅| D[(💾 Publicar\nhipótesis)]
-    C -->|❌| E[🏆 Selección torneo\ntop 30%]
-    E --> F[🔀 Crossover\nmecanismos padre]
-    F --> G[🎲 Mutación\ndosis / vía / combinación]
-    G --> H{¿Convergió?}
-    H -->|❌| B
-    H -->|✅| I([🏁 Mejor hipótesis])
-
-    style D fill:#166534,color:#fff
-    style I fill:#1e3a5f,color:#fff
-```
-
-Checkpoints guardados cada 3 generaciones en `data/drug_database/evolution_memory.json`.
-
----
 
 ## 📊 Historial del Repositorio
 
