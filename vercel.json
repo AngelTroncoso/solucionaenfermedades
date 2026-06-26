@@ -5,17 +5,38 @@
       "src": "frontend/package.json",
       "use": "@vercel/nitro",
       "config": {
-        "preset": "vercel"
+        "preset": "vercel",
+        "serverFiles": [
+          "frontend/.output/server/**/*"
+        ]
       }
     }
   ],
-  "installCommand": "npm install",
-  "buildCommand": "npm run build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "npm run build:frontend",
   "outputDirectory": "frontend/.output",
   "env": {
-    "NODE_OPTIONS": "--max-old-space-size=8192"
+    "NODE_OPTIONS": "--max-old-space-size=8192",
+    "NITRO_PRESET": "vercel"
   },
   "github": {
     "silent": false
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "frontend/.output/server/index.html",
+      "status": 200
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "frontend/.output/server/api/$1",
+      "status": 200
+    }
+  ],
+  "overrides": {
+    "frontend/.output/server/index.html": {
+      "contentType": "text/html; charset=utf-8"
+    }
   }
 }
