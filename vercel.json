@@ -20,7 +20,10 @@
     "NITRO_PRESET": "vercel"
   },
   "github": {
-    "silent": false
+    "silent": false,
+    "enabled": true,
+    "autoDeploy": true,
+    "autoAlias": true
   },
   "routes": [
     {
@@ -38,5 +41,10 @@
     "frontend/.output/server/index.html": {
       "contentType": "text/html; charset=utf-8"
     }
+  },
+  "git": {
+    "repository": "https://github.com/AngelTroncoso/pharma-discovery-hub",
+    "branch": "main",
+    "deployOnPush": true
   }
 }

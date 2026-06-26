@@ -89,6 +89,10 @@ vercel
 
 # Opcional: Despliegue en producción
 vercel --prod
+
+# Para conectar con el nuevo repositorio pharma-discovery-hub:
+vercel link --yes
+vercel git connect AngelTroncoso pharma-discovery-hub
 ```
 
 ### Solución de Problemas Comunes
@@ -192,5 +196,24 @@ CMD ["npm", "run", "start"]
 2. **Cache**: Vercel maneja automáticamente el cache de assets estáticos
 3. **Escalabilidad**: La configuración está optimizada para escalar automáticamente
 4. **Seguridad**: Asegurar que todas las variables sensibles estén en variables de entorno
+5. **Integración Continua**: La configuración ahora incluye despliegue automático desde el repositorio `pharma-discovery-hub`
 
-Esta configuración ha sido probada y optimizada específicamente para el proyecto PharmaFuture 2050, garantizando un despliegue confiable y sin errores en la plataforma Vercel.
+### Integración con pharma-discovery-hub
+
+La configuración ha sido actualizada para integrarse con el nuevo repositorio central:
+
+```bash
+# Para migrar el proyecto existente al nuevo repositorio:
+1. Crear nuevo repositorio: git remote add pharma-hub https://github.com/AngelTroncoso/pharma-discovery-hub
+2. Push inicial: git push pharma-hub main
+3. Conectar Vercel: vercel git connect AngelTroncoso pharma-discovery-hub
+```
+
+### Despliegue Automático
+
+La configuración ahora incluye:
+- `autoDeploy`: true - Despliegue automático en cada push
+- `deployOnPush`: true - Despliegue continuo desde la rama main
+- Integración nativa con GitHub para actualizaciones en tiempo real
+
+Esta configuración ha sido actualizada para integrarse con el repositorio `pharma-discovery-hub` y garantizar despliegues continuos y automatizados en la plataforma Vercel.
