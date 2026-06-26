@@ -35,3 +35,4 @@ frontend/.env.local
 
 Thumbs.db
 node_modules
+.vercel

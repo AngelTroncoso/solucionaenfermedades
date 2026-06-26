@@ -1,0 +1,13 @@
+{
+  "name": "solucionaenfermedades-build",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server/server.js",
+    "preview": "node server/server.js"
+  },
+  "dependencies": {
+    "@tanstack/start": "^1.167.50",
+    "@tanstack/react-start": "^1.167.50"
+  }
+}
