@@ -5,21 +5,15 @@
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "frontend/.output"
+        "distDir": ".output"
       }
     }
   ],
-  "installCommand": "npm install --legacy-peer-deps",
-  "buildCommand": "npm run build:frontend",
+  "installCommand": "cd frontend && npm install --legacy-peer-deps",
+  "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/.output",
   "env": {
     "NODE_OPTIONS": "--max-old-space-size=8192"
-  },
-  "github": {
-    "silent": false,
-    "enabled": true,
-    "autoDeploy": true,
-    "autoAlias": true
   },
   "routes": [
     {
@@ -33,8 +27,14 @@
       "status": 200
     }
   ],
+  "github": {
+    "silent": false,
+    "enabled": true,
+    "autoDeploy": true,
+    "autoAlias": true
+  },
   "git": {
-    "repository": "https://github.com/AngelTroncoso/pharma-discovery-hub",
+    "repository": "https://github.com/AngelTroncoso/solucionaenfermedades",
     "branch": "main",
     "deployOnPush": true
   }
