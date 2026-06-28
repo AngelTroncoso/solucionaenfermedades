@@ -38,7 +38,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copia el frontend construido desde la etapa 1
-COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+COPY --from=frontend-builder /app/dist ./frontend/dist
 
 # Copia el backend desde la etapa 2
 COPY --from=backend-builder /app/ .
